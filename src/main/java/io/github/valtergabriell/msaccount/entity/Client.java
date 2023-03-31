@@ -14,11 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Client {
-
     @Id
-    @Column(nullable = false)
-    private Long id;
-
     @Column(length = 11, nullable = false)
     private String cpf;
 
@@ -42,12 +38,16 @@ public class Client {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    public Client(String cpf, LocalDate birthDate, String clientName, String clientPhoneNumber, String clientEmail, Gender gender) {
+    @Column(nullable = false)
+    private String password;
+
+    public Client(String cpf, LocalDate birthDate, String clientName, String clientPhoneNumber, String clientEmail, Gender gender, String password) {
         this.cpf = cpf;
         this.birthDate = birthDate;
         this.clientName = clientName;
         this.clientPhoneNumber = clientPhoneNumber;
         this.clientEmail = clientEmail;
         this.gender = gender;
+        this.password = password;
     }
 }

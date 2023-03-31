@@ -14,8 +14,9 @@ public class CreateClientRequest {
     private String clientPhoneNumber;
     private String clientEmail;
     private Gender gender;
+    private String password;
 
     public Client toModel() {
-        return new Client(cpf, birthDate, clientName, clientPhoneNumber, clientEmail, gender);
+        return new Client(cpf, birthDate, clientName, clientPhoneNumber, clientEmail, gender, password);
     }
 }

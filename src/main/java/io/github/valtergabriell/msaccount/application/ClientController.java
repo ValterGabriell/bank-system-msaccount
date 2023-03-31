@@ -1,12 +1,16 @@
 package io.github.valtergabriell.msaccount.application;
 
 
+import io.github.valtergabriell.msaccount.application.dto.CommonResponse;
 import io.github.valtergabriell.msaccount.application.dto.CreateClientRequest;
 import io.github.valtergabriell.msaccount.application.dto.CreateClientResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController()
 @RequestMapping("client")
@@ -24,9 +28,10 @@ public class ClientController {
 
 
     @PostMapping
-    public ResponseEntity<CreateClientResponse> createClient(@RequestBody CreateClientRequest request) {
-        CreateClientResponse clientResponse = clientService.createClient(request);
-        return ResponseEntity.ok(clientResponse);
+    public ResponseEntity<CommonResponse<CreateClientResponse>> createClient(@RequestBody CreateClientRequest request) {
+        URI headerLocation = ServletUriComponentsBuilder.fromCurrentRequest().query("cpf={cpf}").buildAndExpand(request.getCpf()).toUri();
+        CommonResponse<CreateClientResponse> client = clientService.createClient(request, headerLocation);
+        return ResponseEntity.ok(client);
     }
 
 }
