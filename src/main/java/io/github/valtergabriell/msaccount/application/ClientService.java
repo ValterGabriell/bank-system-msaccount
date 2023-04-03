@@ -41,32 +41,39 @@ public class ClientService {
                 if (!hasCPFOnlyOneDigit) {
                     if (!hasPhoneNumberOnlyOneDigit) {
                         if (isValidEmail) {
-                            if (birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())){
-                                log.info("Validations Done! \n " + request);
+                            if (birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())) {
+                                if (!cpfAlreadySavedOnDatabase(request.getCpf())){
+                                    log.info("Validations Done! \n " + request);
 
-                                log.info("Saving at database");
+                                    log.info("Saving at database");
 
-                                //saving at database
-                                Client client = request.toModel();
-                                client.setAccountDate(LocalDate.now());
-                                Client clientSaved = clientRepository.save(client);
+                                    //saving at database
+                                    Client client = request.toModel();
+                                    client.setAccountDate(LocalDate.now());
+                                    Client clientSaved = clientRepository.save(client);
 
 
-                                //Creating object to response
-                                CreateClientResponse clientResponse = new CreateClientResponse();
-                                clientResponse.setCpf(clientSaved.getCpf());
-                                clientResponse.setClientEmail(clientSaved.getClientEmail());
-                                clientResponse.setClientName(clientSaved.getClientName());
-                                clientResponse.setClientPhoneNumber(clientSaved.getClientPhoneNumber());
-                                clientResponse.setGender(clientSaved.getGender());
-                                clientResponse.setBirthDate(clientSaved.getBirthDate());
-                                clientResponse.setAccountDate(clientSaved.getAccountDate());
+                                    //Creating object to response
+                                    CreateClientResponse clientResponse = new CreateClientResponse();
+                                    clientResponse.setCpf(clientSaved.getCpf());
+                                    clientResponse.setClientEmail(clientSaved.getClientEmail());
+                                    clientResponse.setClientName(clientSaved.getClientName());
+                                    clientResponse.setClientPhoneNumber(clientSaved.getClientPhoneNumber());
+                                    clientResponse.setGender(clientSaved.getGender());
+                                    clientResponse.setBirthDate(clientSaved.getBirthDate());
+                                    clientResponse.setAccountDate(clientSaved.getAccountDate());
 
-                                commonResponse.setData(clientResponse);
-                                commonResponse.setMessage("Conta criada com sucesso!");
-                                commonResponse.setHeaderLocation(headerLocation.toString());
-                            }else{
-                                log.error("Email is not valid");
+                                    commonResponse.setData(clientResponse);
+                                    commonResponse.setMessage("Conta criada com sucesso!");
+                                    commonResponse.setHeaderLocation(headerLocation.toString());
+                                }else{
+                                    log.error("CPF not valid");
+                                    commonResponse.setData(null);
+                                    commonResponse.setMessage("CPF já cadastrado no nosso banco de dados!!!");
+                                }
+
+                            } else {
+                                log.error("Age not valid");
                                 commonResponse.setData(null);
                                 commonResponse.setMessage("Você precisa ter mais de 17 anos para abrir uma conta!");
                             }
@@ -109,5 +116,9 @@ public class ClientService {
         int birthDateYear = birthDate.getYear();
         int currentYear = LocalDate.now().getYear();
         return currentYear - birthDateYear > 17;
+    }
+
+    private boolean cpfAlreadySavedOnDatabase(String cpf) {
+        return clientRepository.findById(cpf).isPresent();
     }
 }
