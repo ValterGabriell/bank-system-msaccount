@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -37,14 +36,12 @@ public class ClientService {
         boolean hasCPFOnlyOneDigit = cpfValidator.hasOnlyOneDigitOnWholeNumber(request.getCpf());
         boolean isValidEmail = EmailValidator.isValidEmail(request.getClientEmail());
 
-
-
-
-            if (isCPFCorrectSize) {
-                if (isPhoneNumberCorrectSize) {
-                    if (!hasCPFOnlyOneDigit) {
-                        if (!hasPhoneNumberOnlyOneDigit) {
-                            if (isValidEmail) {
+        if (isCPFCorrectSize) {
+            if (isPhoneNumberCorrectSize) {
+                if (!hasCPFOnlyOneDigit) {
+                    if (!hasPhoneNumberOnlyOneDigit) {
+                        if (isValidEmail) {
+                            if (birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())){
                                 log.info("Validations Done! \n " + request);
 
                                 log.info("Saving at database");
@@ -68,33 +65,36 @@ public class ClientService {
                                 commonResponse.setData(clientResponse);
                                 commonResponse.setMessage("Conta criada com sucesso!");
                                 commonResponse.setHeaderLocation(headerLocation.toString());
-
-
-                            } else {
+                            }else{
                                 log.error("Email is not valid");
                                 commonResponse.setData(null);
-                                commonResponse.setMessage("Email inválido");
+                                commonResponse.setMessage("Você precisa ter mais de 17 anos para abrir uma conta!");
                             }
                         } else {
-                            log.error("Phone number cannot have only one digit");
+                            log.error("Email is not valid");
                             commonResponse.setData(null);
-                            commonResponse.setMessage("Número de telefone inválido");
+                            commonResponse.setMessage("Email inválido");
                         }
                     } else {
-                        log.error("CPF cannot have only one digit");
+                        log.error("Phone number cannot have only one digit");
                         commonResponse.setData(null);
-                        commonResponse.setMessage("CPF inválido");
+                        commonResponse.setMessage("Número de telefone inválido");
                     }
                 } else {
-                    log.error("Phone number size incorrect");
+                    log.error("CPF cannot have only one digit");
                     commonResponse.setData(null);
-                    commonResponse.setMessage("Tamanho de telefone incorreto");
+                    commonResponse.setMessage("CPF inválido");
                 }
             } else {
-                log.error("CPF size incorrect");
+                log.error("Phone number size incorrect");
                 commonResponse.setData(null);
-                commonResponse.setMessage("Tamanho CPF incorreto");
+                commonResponse.setMessage("Tamanho de telefone incorreto");
             }
+        } else {
+            log.error("CPF size incorrect");
+            commonResponse.setData(null);
+            commonResponse.setMessage("Tamanho CPF incorreto");
+        }
 
         return commonResponse;
 
@@ -103,5 +103,11 @@ public class ClientService {
     public Client getAccountByCpf(String cpf) throws NotFoundException {
         Optional<Client> client = clientRepository.findById(cpf);
         return client.get();
+    }
+
+    private boolean birthDateIsBiggerThan18YearsSinceCurrentDate(LocalDate birthDate) {
+        int birthDateYear = birthDate.getYear();
+        int currentYear = LocalDate.now().getYear();
+        return currentYear - birthDateYear > 17;
     }
 }
