@@ -3,16 +3,20 @@ package io.github.valtergabriell.msaccount.application;
 import io.github.valtergabriell.msaccount.application.dto.CommonResponse;
 import io.github.valtergabriell.msaccount.application.dto.CreateClientRequest;
 import io.github.valtergabriell.msaccount.application.dto.CreateClientResponse;
+import io.github.valtergabriell.msaccount.application.exception.NotFoundException;
 import io.github.valtergabriell.msaccount.application.validator.CPFValidator;
 import io.github.valtergabriell.msaccount.application.validator.EmailValidator;
 import io.github.valtergabriell.msaccount.application.validator.PhoneNumberValidator;
+import io.github.valtergabriell.msaccount.entity.Client;
 import io.github.valtergabriell.msaccount.infra.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -45,26 +49,26 @@ public class ClientService {
 
                                 log.info("Saving at database");
 
-                                //TODO: save at database
+                                //saving at database
+                                Client client = request.toModel();
+                                client.setAccountDate(LocalDate.now());
+                                Client clientSaved = clientRepository.save(client);
 
 
                                 //Creating object to response
                                 CreateClientResponse clientResponse = new CreateClientResponse();
-
-
-                                clientResponse.setCpf(request.getCpf());
-                                clientResponse.setClientEmail(request.getClientEmail());
-                                clientResponse.setClientName(request.getClientName());
-                                clientResponse.setClientPhoneNumber(request.getClientPhoneNumber());
-                                clientResponse.setGender(request.getGender());
-                                clientResponse.setBirthDate(request.getBirthDate());
-                                clientResponse.setAccountDate(LocalDateTime.now().toLocalDate());
+                                clientResponse.setCpf(clientSaved.getCpf());
+                                clientResponse.setClientEmail(clientSaved.getClientEmail());
+                                clientResponse.setClientName(clientSaved.getClientName());
+                                clientResponse.setClientPhoneNumber(clientSaved.getClientPhoneNumber());
+                                clientResponse.setGender(clientSaved.getGender());
+                                clientResponse.setBirthDate(clientSaved.getBirthDate());
+                                clientResponse.setAccountDate(clientSaved.getAccountDate());
 
                                 commonResponse.setData(clientResponse);
                                 commonResponse.setMessage("Conta criada com sucesso!");
                                 commonResponse.setHeaderLocation(headerLocation.toString());
 
-                                log.info("Objects created \n " + commonResponse);
 
                             } else {
                                 log.error("Email is not valid");
@@ -96,4 +100,8 @@ public class ClientService {
 
     }
 
+    public Client getAccountByCpf(String cpf) throws NotFoundException {
+        Optional<Client> client = clientRepository.findById(cpf);
+        return client.get();
+    }
 }
