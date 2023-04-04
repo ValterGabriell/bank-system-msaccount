@@ -62,6 +62,7 @@ public class ClientService {
                                     clientResponse.setGender(clientSaved.getGender());
                                     clientResponse.setBirthDate(clientSaved.getBirthDate());
                                     clientResponse.setAccountDate(clientSaved.getAccountDate());
+                                    clientResponse.setIncome(clientSaved.getIncome());
 
                                     commonResponse.setData(clientResponse);
                                     commonResponse.setMessage("Conta criada com sucesso!");

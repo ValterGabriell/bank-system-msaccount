@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -41,7 +42,10 @@ public class Client {
     @Column(nullable = false)
     private String password;
 
-    public Client(String cpf, LocalDate birthDate, String clientName, String clientPhoneNumber, String clientEmail, Gender gender, String password) {
+    @Column(nullable = false)
+    private BigDecimal income;
+
+    public Client(String cpf, LocalDate birthDate, String clientName, String clientPhoneNumber, String clientEmail, Gender gender, String password, BigDecimal income) {
         this.cpf = cpf;
         this.birthDate = birthDate;
         this.clientName = clientName;
@@ -49,5 +53,6 @@ public class Client {
         this.clientEmail = clientEmail;
         this.gender = gender;
         this.password = password;
+        this.income = income;
     }
 }
