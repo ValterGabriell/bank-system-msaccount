@@ -45,6 +45,23 @@ http://localhost:8080/account
   </tr>
 </table>
 
+<h3>Request esperada</h3></br>
+
+```bash
+{
+	"cpf":"22324672912",
+	"birthDate":"2005-06-25",
+	"clientName":"nome teste",
+	"clientPhoneNumber":"5589541222659",
+	"clientEmail":"email@gmail.com",
+	"gender":"FEMALE",
+	"password":"12345",
+	"income":6500
+}
+```
+
+
+
 <h3>Resposta esperada</h3></br>
 
 ```bash
