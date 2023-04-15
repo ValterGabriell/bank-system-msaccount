@@ -9,7 +9,6 @@ import io.github.valtergabriell.msaccount.application.validator.EmailValidator;
 import io.github.valtergabriell.msaccount.application.validator.PhoneNumberValidator;
 import io.github.valtergabriell.msaccount.entity.Client;
 import io.github.valtergabriell.msaccount.infra.ClientRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +18,13 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class ClientService {
 
     private final ClientRepository clientRepository;
+
+    public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
 
     public CommonResponse<CreateClientResponse> createClient(CreateClientRequest request, URI headerLocation) {
