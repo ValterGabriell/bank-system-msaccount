@@ -18,7 +18,7 @@ class ClientServiceTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "12345", "65478", "12345678945"})
     void itShouldReturnTrueWhenCpfHasElevenDigitsAndFalseWhenIsNot(String cpf){
-        assertTrue(cpf.length() == 11);
+        assertEquals(11, cpf.length());
     }
 
     @DisplayName(value = "Verify if CPF has just one type of digit")
@@ -26,21 +26,21 @@ class ClientServiceTest {
     @ValueSource(strings = {"1", "2"})
     void itShouldReturnTrueIfCpfHasJustOneTypeOfNumber(String value){
         String newString = "1".repeat(11);
-        assertTrue(value.equals(newString));
+        assertEquals(value, newString);
     }
 
     @DisplayName(value = "Verify if phone number has 13 digits")
     @ParameterizedTest
     @ValueSource(strings = {"", "12345", "65478", "12345678945","1234567894562"})
     void itShouldReturnTrueWhenPhoneNumberHasFourteenDigitsAndFalseWhenIsNot(String phone){
-        assertTrue(phone.length() == 13);
+        assertEquals(13, phone.length());
     }
 
     @DisplayName(value = "Verify if phone starts with 55")
     @ParameterizedTest
     @ValueSource(strings = {"", "12345", "65478", "12345678945","12345678945612", "553256"})
     void itShouldReturnTrueWhenPhoneNumberStartsWithFive(String phone){
-        assertTrue(phone.substring(0, 2).equals("55"));
+        assertEquals("55", phone.substring(0, 2));
     }
 
     @DisplayName("Verify if is email valid")

@@ -3,7 +3,6 @@ package io.github.valtergabriell.msaccount.application;
 import io.github.valtergabriell.msaccount.application.dto.CommonResponse;
 import io.github.valtergabriell.msaccount.application.dto.CreateClientRequest;
 import io.github.valtergabriell.msaccount.application.dto.CreateClientResponse;
-import io.github.valtergabriell.msaccount.application.exception.NotFoundException;
 import io.github.valtergabriell.msaccount.application.validator.CPFValidator;
 import io.github.valtergabriell.msaccount.application.validator.EmailValidator;
 import io.github.valtergabriell.msaccount.application.validator.PhoneNumberValidator;
@@ -44,7 +43,7 @@ public class ClientService {
                     if (!hasPhoneNumberOnlyOneDigit) {
                         if (isValidEmail) {
                             if (birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())) {
-                                if (!cpfAlreadySavedOnDatabase(request.getCpf())){
+                                if (!cpfAlreadySavedOnDatabase(request.getCpf())) {
                                     log.info("Validations Done! \n " + request);
 
                                     log.info("Saving at database");
@@ -69,7 +68,7 @@ public class ClientService {
                                     commonResponse.setData(clientResponse);
                                     commonResponse.setMessage("Conta criada com sucesso!");
                                     commonResponse.setHeaderLocation(headerLocation.toString());
-                                }else{
+                                } else {
                                     log.error("CPF not valid");
                                     commonResponse.setData(null);
                                     commonResponse.setMessage("CPF já cadastrado no nosso banco de dados!!!");
@@ -110,9 +109,21 @@ public class ClientService {
 
     }
 
-    public Client getAccountByCpf(String cpf) throws NotFoundException {
-        Optional<Client> client = clientRepository.findById(cpf);
-        return client.get();
+    public Client getAccountByCpf(String cpf) {
+        if (cpfAlreadySavedOnDatabase(cpf)) {
+            Optional<Client> client = clientRepository.findById(cpf);
+            return client.get();
+        }else{
+            throw new RuntimeException("Usuário não encontrado");
+        }
+    }
+
+    public void deleteAccountByCpf(String cpf) {
+        if (cpfAlreadySavedOnDatabase(cpf)) {
+            clientRepository.deleteById(cpf);
+        }else{
+            throw new RuntimeException("Usuário não encontrado");
+        }
     }
 
     private boolean birthDateIsBiggerThan18YearsSinceCurrentDate(LocalDate birthDate) {
