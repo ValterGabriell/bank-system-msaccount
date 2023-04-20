@@ -3,6 +3,7 @@ package io.github.valtergabriell.msaccount.application;
 import io.github.valtergabriell.msaccount.application.dto.CommonResponse;
 import io.github.valtergabriell.msaccount.application.dto.CreateClientRequest;
 import io.github.valtergabriell.msaccount.application.dto.CreateClientResponse;
+import io.github.valtergabriell.msaccount.application.exception.RequestException;
 import io.github.valtergabriell.msaccount.application.validator.CPFValidator;
 import io.github.valtergabriell.msaccount.application.validator.EmailValidator;
 import io.github.valtergabriell.msaccount.application.validator.PhoneNumberValidator;
@@ -110,11 +111,12 @@ public class ClientService {
     }
 
     public Client getAccountByCpf(String cpf) {
+
         if (cpfAlreadySavedOnDatabase(cpf)) {
             Optional<Client> client = clientRepository.findById(cpf);
             return client.get();
         }else{
-            throw new RuntimeException("Usuário não encontrado");
+            throw new RequestException("Usuário não encontrado");
         }
     }
 
