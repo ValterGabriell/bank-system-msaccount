@@ -182,7 +182,7 @@ http://localhost:8080/account
     }
 ```
 
-<h1>Credits</h1>
+<h1>Creditos</h1>
 
 ---
 
