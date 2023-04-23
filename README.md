@@ -9,6 +9,7 @@ Este é um projeto que deve ser rodado após o Eureka Server estar rodando, para
 <!--ts-->
    * [Como usar?](#como-usar)
    * [Endpoints](#endpoints)
+   * [Testes](#testes)
    * [Credits](#credits)
 <!--te-->
   
@@ -100,7 +101,7 @@ http://localhost:8080/account
 
 
 
-<h3>Wait for something like</h3></br>
+<h3>Resposta esperada</h3></br>
 
 ```bash
 {
@@ -114,6 +115,71 @@ http://localhost:8080/account
 	"password": "12345",
 	"income": 6500.00
 }
+```
+
+<h1>Testes</h1>
+
+<h3>Verifica se o CPF tem 11 digitos</h3></br>
+
+```
+    @DisplayName(value = "Verify if CPF has 11 digits")
+    @ParameterizedTest
+    @ValueSource(strings = {"", "12345", "65478", "12345678945"})
+    void itShouldReturnTrueWhenCpfHasElevenDigitsAndFalseWhenIsNot(String cpf){
+        assertEquals(11, cpf.length());
+    }
+    
+```
+
+
+<h3>Verifica se o CPF possui caracteres repetidos em todo o campo</h3></br>
+
+```
+    @DisplayName(value = "Verify if CPF has just one type of digit")
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "2"})
+    void itShouldReturnTrueIfCpfHasJustOneTypeOfNumber(String value){
+        String newString = "1".repeat(11);
+        assertEquals(value, newString);
+    }
+```
+
+
+
+<h3>Verifica se o numero de telefone tem 13 digitos</h3></br>
+
+```
+    @DisplayName(value = "Verify if phone number has 13 digits")
+    @ParameterizedTest
+    @ValueSource(strings = {"", "12345", "65478", "12345678945","1234567894562"})
+    void itShouldReturnTrueWhenPhoneNumberHasFourteenDigitsAndFalseWhenIsNot(String phone){
+        assertEquals(13, phone.length());
+    }
+```
+
+
+<h3>Verifica se o numero de telefone inicia com 55</h3></br>
+
+```
+    @DisplayName(value = "Verify if phone starts with 55")
+    @ParameterizedTest
+    @ValueSource(strings = {"", "12345", "65478", "12345678945","12345678945612", "553256"})
+    void itShouldReturnTrueWhenPhoneNumberStartsWithFive(String phone){
+        assertEquals("55", phone.substring(0, 2));
+    }
+```
+
+
+<h3>Verifica se o Email inserido é válido</h3></br>
+
+```
+    @DisplayName("Verify if is email valid")
+    @ParameterizedTest
+    @ValueSource(strings = {"vgabrielbri@hotmail.com", "用户名@领域.电脑"})
+    void itShouldReturnTrueIfEmailIsValid(String email){
+        String regexPattern = EMAIL_PATTERN;
+        assertTrue(Pattern.compile(regexPattern).matcher(email).matches());
+    }
 ```
 
 <h1>Credits</h1>
