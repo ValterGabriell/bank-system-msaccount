@@ -1,19 +1,28 @@
 package io.github.valtergabriell.msaccount.application.validator;
 
+import io.github.valtergabriell.msaccount.application.exception.RequestException;
 import io.github.valtergabriell.msaccount.application.util.CommonMethod;
 
+import static io.github.valtergabriell.msaccount.application.exception.ExceptionsValues.*;
 
-import static io.github.valtergabriell.msaccount.application.util.CommonMethod.PHONE_NUMBER_COUNT;
 
 public class PhoneNumberValidator extends NumberFieldsValidation {
 
     @Override
     public boolean validateFieldSize(String value) {
-        return value.length() == 13;
+        boolean isCpfValidLenght = value.length() == PHONE_NUMBER_COUNT;
+        if (!isCpfValidLenght) {
+            throw new RequestException(CPF_INVALID);
+        }
+        return true;
     }
 
     public boolean hasOnlyOneDigitOnWholeNumber(String value) {
-        return CommonMethod.checkIfValueHasOnlyOneDigitRepeatly(value, PHONE_NUMBER_COUNT);
+        boolean hasOnlyOneDigitRepeatly = CommonMethod.checkIfValueHasOnlyOneDigitRepeatly(value, CPF_COUNT);
+        if (hasOnlyOneDigitRepeatly){
+            throw new RequestException(DIGITS_REPEATLY);
+        }
+        return false;
     }
 
 }

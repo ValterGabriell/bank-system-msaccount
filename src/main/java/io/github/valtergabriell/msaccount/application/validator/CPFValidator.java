@@ -1,19 +1,29 @@
 package io.github.valtergabriell.msaccount.application.validator;
 
+import io.github.valtergabriell.msaccount.application.exception.RequestException;
 import io.github.valtergabriell.msaccount.application.util.CommonMethod;
 
-import static io.github.valtergabriell.msaccount.application.util.CommonMethod.CPF_COUNT;
+import static io.github.valtergabriell.msaccount.application.exception.ExceptionsValues.*;
+
 
 public class CPFValidator extends NumberFieldsValidation {
 
 
     @Override
     public boolean validateFieldSize(String value) {
-        return value.length() == 11;
+        boolean isCpfValidLenght = value.length() == CPF_COUNT;
+        if (!isCpfValidLenght) {
+            throw new RequestException(CPF_INVALID);
+        }
+        return true;
     }
 
     @Override
     public boolean hasOnlyOneDigitOnWholeNumber(String value) {
-        return CommonMethod.checkIfValueHasOnlyOneDigitRepeatly(value, CPF_COUNT);
+        boolean hasOnlyOneDigitRepeatly = CommonMethod.checkIfValueHasOnlyOneDigitRepeatly(value, CPF_COUNT);
+        if (hasOnlyOneDigitRepeatly){
+            throw new RequestException(DIGITS_REPEATLY);
+        }
+        return false;
     }
 }

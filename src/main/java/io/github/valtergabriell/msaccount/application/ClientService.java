@@ -16,6 +16,8 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static io.github.valtergabriell.msaccount.application.exception.ExceptionsValues.*;
+
 @Service
 @Slf4j
 public class ClientService {
@@ -38,93 +40,54 @@ public class ClientService {
         boolean hasCPFOnlyOneDigit = cpfValidator.hasOnlyOneDigitOnWholeNumber(request.getCpf());
         boolean isValidEmail = EmailValidator.isValidEmail(request.getClientEmail());
 
-        if (isCPFCorrectSize) {
-            if (isPhoneNumberCorrectSize) {
-                if (!hasCPFOnlyOneDigit) {
-                    if (!hasPhoneNumberOnlyOneDigit) {
-                        if (isValidEmail) {
-                            if (birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())) {
-                                if (!cpfAlreadySavedOnDatabase(request.getCpf())) {
-                                    log.info("Validations Done! \n " + request);
+        if (isCPFCorrectSize && isValidEmail && isPhoneNumberCorrectSize && hasCPFOnlyOneDigit && hasPhoneNumberOnlyOneDigit) {
+            if (birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())) {
+                if (!cpfAlreadySavedOnDatabase(request.getCpf())) {
+                    //saving at database
+                    Client client = request.toModel();
+                    client.setAccountDate(LocalDate.now());
+                    Client clientSaved = clientRepository.save(client);
 
-                                    log.info("Saving at database");
+                    //Creating object to response
+                    CreateClientResponse clientResponse = new CreateClientResponse();
+                    clientResponse.setCpf(clientSaved.getCpf());
+                    clientResponse.setClientEmail(clientSaved.getClientEmail());
+                    clientResponse.setClientName(clientSaved.getClientName());
+                    clientResponse.setClientPhoneNumber(clientSaved.getClientPhoneNumber());
+                    clientResponse.setGender(clientSaved.getGender());
+                    clientResponse.setBirthDate(clientSaved.getBirthDate());
+                    clientResponse.setAccountDate(clientSaved.getAccountDate());
+                    clientResponse.setIncome(clientSaved.getIncome());
 
-                                    //saving at database
-                                    Client client = request.toModel();
-                                    client.setAccountDate(LocalDate.now());
-                                    Client clientSaved = clientRepository.save(client);
-
-
-                                    //Creating object to response
-                                    CreateClientResponse clientResponse = new CreateClientResponse();
-                                    clientResponse.setCpf(clientSaved.getCpf());
-                                    clientResponse.setClientEmail(clientSaved.getClientEmail());
-                                    clientResponse.setClientName(clientSaved.getClientName());
-                                    clientResponse.setClientPhoneNumber(clientSaved.getClientPhoneNumber());
-                                    clientResponse.setGender(clientSaved.getGender());
-                                    clientResponse.setBirthDate(clientSaved.getBirthDate());
-                                    clientResponse.setAccountDate(clientSaved.getAccountDate());
-                                    clientResponse.setIncome(clientSaved.getIncome());
-
-                                    commonResponse.setData(clientResponse);
-                                    commonResponse.setMessage("Conta criada com sucesso!");
-                                    commonResponse.setHeaderLocation(headerLocation.toString());
-                                } else {
-                                    log.error("CPF not valid");
-                                    commonResponse.setData(null);
-                                    commonResponse.setMessage("CPF já cadastrado no nosso banco de dados!!!");
-                                }
-
-                            } else {
-                                log.error("Age not valid");
-                                commonResponse.setData(null);
-                                commonResponse.setMessage("Você precisa ter mais de 17 anos para abrir uma conta!");
-                            }
-                        } else {
-                            log.error("Email is not valid");
-                            commonResponse.setData(null);
-                            commonResponse.setMessage("Email inválido");
-                        }
-                    } else {
-                        log.error("Phone number cannot have only one digit");
-                        commonResponse.setData(null);
-                        commonResponse.setMessage("Número de telefone inválido");
-                    }
+                    commonResponse.setData(clientResponse);
+                    commonResponse.setMessage(ACCOUNT_CREATED);
+                    commonResponse.setHeaderLocation(headerLocation.toString());
                 } else {
-                    log.error("CPF cannot have only one digit");
                     commonResponse.setData(null);
-                    commonResponse.setMessage("CPF inválido");
+                    commonResponse.setMessage(ALREADY_ON_DATABASE);
                 }
             } else {
-                log.error("Phone number size incorrect");
                 commonResponse.setData(null);
-                commonResponse.setMessage("Tamanho de telefone incorreto");
+                commonResponse.setMessage(AGE_INVALID);
             }
-        } else {
-            log.error("CPF size incorrect");
-            commonResponse.setData(null);
-            commonResponse.setMessage("Tamanho CPF incorreto");
         }
-
         return commonResponse;
-
     }
 
     public Client getAccountByCpf(String cpf) {
-
         if (cpfAlreadySavedOnDatabase(cpf)) {
             Optional<Client> client = clientRepository.findById(cpf);
             return client.get();
-        }else{
-            throw new RequestException("Usuário não encontrado");
+        } else {
+            throw new RequestException(USER_NOT_FOUND);
         }
     }
 
     public void deleteAccountByCpf(String cpf) {
         if (cpfAlreadySavedOnDatabase(cpf)) {
             clientRepository.deleteById(cpf);
-        }else{
-            throw new RuntimeException("Usuário não encontrado");
+        } else {
+            throw new RuntimeException(USER_NOT_FOUND);
         }
     }
 

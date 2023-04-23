@@ -14,10 +14,4 @@ public class CommonMethod {
 
         return isValueSameSizeThanNewString;
     }
-
-    public static int CPF_COUNT = 11;
-    public static int PHONE_NUMBER_COUNT = 13;
-    public static String EMAIL_PATTERN = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@"
-            + "[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
-
 }

@@ -1,13 +1,20 @@
 package io.github.valtergabriell.msaccount.application.validator;
 
+import io.github.valtergabriell.msaccount.application.exception.RequestException;
+
 import java.util.regex.Pattern;
 
-import static io.github.valtergabriell.msaccount.application.util.CommonMethod.EMAIL_PATTERN;
+import static io.github.valtergabriell.msaccount.application.exception.ExceptionsValues.EMAIL_PATTERN;
+
 
 public class EmailValidator {
     public static boolean isValidEmail(String email) {
         String regexPattern = EMAIL_PATTERN;
-        return Pattern.compile(regexPattern).matcher(email).matches();
+        boolean matches = Pattern.compile(regexPattern).matcher(email).matches();
+        if (!matches){
+            throw new RequestException("Email inválido!");
+        }
+        return true;
     }
 
 }

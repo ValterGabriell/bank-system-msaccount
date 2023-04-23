@@ -8,7 +8,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.regex.Pattern;
 
-import static io.github.valtergabriell.msaccount.application.util.CommonMethod.EMAIL_PATTERN;
+
+import static io.github.valtergabriell.msaccount.application.exception.ExceptionsValues.EMAIL_PATTERN;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientServiceTest {
