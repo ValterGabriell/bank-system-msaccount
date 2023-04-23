@@ -40,35 +40,34 @@ public class ClientService {
         boolean hasCPFOnlyOneDigit = cpfValidator.hasOnlyOneDigitOnWholeNumber(request.getCpf());
         boolean isValidEmail = EmailValidator.isValidEmail(request.getClientEmail());
 
-        if (isCPFCorrectSize && isValidEmail && isPhoneNumberCorrectSize && hasCPFOnlyOneDigit && hasPhoneNumberOnlyOneDigit) {
-            if (birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())) {
-                if (!cpfAlreadySavedOnDatabase(request.getCpf())) {
-                    //saving at database
-                    Client client = request.toModel();
-                    client.setAccountDate(LocalDate.now());
-                    Client clientSaved = clientRepository.save(client);
+        if (isCPFCorrectSize
+                && isValidEmail
+                && isPhoneNumberCorrectSize
+                && hasCPFOnlyOneDigit
+                && hasPhoneNumberOnlyOneDigit
+                && birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())) {
+            if (!cpfAlreadySavedOnDatabase(request.getCpf())) {
+                //saving at database
+                Client client = request.toModel();
+                client.setAccountDate(LocalDate.now());
+                Client clientSaved = clientRepository.save(client);
 
-                    //Creating object to response
-                    CreateClientResponse clientResponse = new CreateClientResponse();
-                    clientResponse.setCpf(clientSaved.getCpf());
-                    clientResponse.setClientEmail(clientSaved.getClientEmail());
-                    clientResponse.setClientName(clientSaved.getClientName());
-                    clientResponse.setClientPhoneNumber(clientSaved.getClientPhoneNumber());
-                    clientResponse.setGender(clientSaved.getGender());
-                    clientResponse.setBirthDate(clientSaved.getBirthDate());
-                    clientResponse.setAccountDate(clientSaved.getAccountDate());
-                    clientResponse.setIncome(clientSaved.getIncome());
+                //Creating object to response
+                CreateClientResponse clientResponse = new CreateClientResponse();
+                clientResponse.setCpf(clientSaved.getCpf());
+                clientResponse.setClientEmail(clientSaved.getClientEmail());
+                clientResponse.setClientName(clientSaved.getClientName());
+                clientResponse.setClientPhoneNumber(clientSaved.getClientPhoneNumber());
+                clientResponse.setGender(clientSaved.getGender());
+                clientResponse.setBirthDate(clientSaved.getBirthDate());
+                clientResponse.setAccountDate(clientSaved.getAccountDate());
+                clientResponse.setIncome(clientSaved.getIncome());
 
-                    commonResponse.setData(clientResponse);
-                    commonResponse.setMessage(ACCOUNT_CREATED);
-                    commonResponse.setHeaderLocation(headerLocation.toString());
-                } else {
-                    commonResponse.setData(null);
-                    commonResponse.setMessage(ALREADY_ON_DATABASE);
-                }
+                commonResponse.setData(clientResponse);
+                commonResponse.setMessage(ACCOUNT_CREATED);
+                commonResponse.setHeaderLocation(headerLocation.toString());
             } else {
-                commonResponse.setData(null);
-                commonResponse.setMessage(AGE_INVALID);
+                throw new RequestException(ALREADY_ON_DATABASE);
             }
         }
         return commonResponse;
@@ -87,14 +86,18 @@ public class ClientService {
         if (cpfAlreadySavedOnDatabase(cpf)) {
             clientRepository.deleteById(cpf);
         } else {
-            throw new RuntimeException(USER_NOT_FOUND);
+            throw new RequestException(USER_NOT_FOUND);
         }
     }
 
     private boolean birthDateIsBiggerThan18YearsSinceCurrentDate(LocalDate birthDate) {
         int birthDateYear = birthDate.getYear();
         int currentYear = LocalDate.now().getYear();
-        return currentYear - birthDateYear > 17;
+        boolean isMajorAge = currentYear - birthDateYear > 17;
+        if (!isMajorAge) {
+            throw new RequestException(AGE_INVALID);
+        }
+        return true;
     }
 
     private boolean cpfAlreadySavedOnDatabase(String cpf) {
