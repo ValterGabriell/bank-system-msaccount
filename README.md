@@ -10,7 +10,7 @@ Este é um projeto que deve ser rodado após o Eureka Server estar rodando, para
    * [Como usar?](#como-usar)
    * [Endpoints](#endpoints)
    * [Testes](#testes)
-   * [Credits](#credits)
+   * [Creditos](#creditos)
 <!--te-->
   
 <h1>Como usar?</h1>
