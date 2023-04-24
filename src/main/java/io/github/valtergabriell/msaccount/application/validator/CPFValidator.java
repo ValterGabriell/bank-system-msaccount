@@ -11,11 +11,21 @@ public class CPFValidator extends NumberFieldsValidation {
 
     @Override
     public boolean validateFieldSize(String value) {
-        boolean isCpfValidLenght = value.length() == CPF_COUNT;
-        if (!isCpfValidLenght) {
-            throw new RequestException(CPF_INVALID);
+        if (isCnpj(value)){
+            boolean isCpfValidLenght = value.length() == CNPJ_COUNT;
+            if (!isCpfValidLenght) {
+                throw new RequestException(CNPJ_INVALID);
+            }
+            return true;
+        } else if (isCpf(value)){
+            boolean isCpfValidLenght = value.length() == CPF_COUNT;
+            if (!isCpfValidLenght) {
+                throw new RequestException(CPF_INVALID);
+            }
+            return true;
+        } else{
+            throw new RequestException(INVALID_LENGHT);
         }
-        return true;
     }
 
     @Override

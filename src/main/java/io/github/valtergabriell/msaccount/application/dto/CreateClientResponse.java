@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class CreateClientResponse {
 
 
-    private String cpf;
+    private String id;
     private LocalDate birthDate;
     private LocalDate accountDate;
 

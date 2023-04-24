@@ -36,17 +36,17 @@ public class ClientService {
 
         boolean isPhoneNumberCorrectSize = phoneNumberValidator.validateFieldSize(request.getClientPhoneNumber());
         boolean hasPhoneNumberOnlyOneDigit = phoneNumberValidator.hasOnlyOneDigitOnWholeNumber(request.getClientPhoneNumber());
-        boolean isCPFCorrectSize = cpfValidator.validateFieldSize(request.getCpf());
-        boolean hasCPFOnlyOneDigit = cpfValidator.hasOnlyOneDigitOnWholeNumber(request.getCpf());
+        boolean isIdCorrectSize = cpfValidator.validateFieldSize(request.getId());
+        boolean hasIdOnlyOneDigit = cpfValidator.hasOnlyOneDigitOnWholeNumber(request.getId());
         boolean isValidEmail = EmailValidator.isValidEmail(request.getClientEmail());
 
-        if (isCPFCorrectSize
+        if (isIdCorrectSize
                 && isValidEmail
                 && isPhoneNumberCorrectSize
-                && hasCPFOnlyOneDigit
+                && hasIdOnlyOneDigit
                 && hasPhoneNumberOnlyOneDigit
                 && birthDateIsBiggerThan18YearsSinceCurrentDate(request.getBirthDate())) {
-            if (!cpfAlreadySavedOnDatabase(request.getCpf())) {
+            if (!isIdAlreadySavedOnDatabase(request.getId())) {
                 //saving at database
                 Client client = request.toModel();
                 client.setAccountDate(LocalDate.now());
@@ -54,7 +54,7 @@ public class ClientService {
 
                 //Creating object to response
                 CreateClientResponse clientResponse = new CreateClientResponse();
-                clientResponse.setCpf(clientSaved.getCpf());
+                clientResponse.setId(clientSaved.getId());
                 clientResponse.setClientEmail(clientSaved.getClientEmail());
                 clientResponse.setClientName(clientSaved.getClientName());
                 clientResponse.setClientPhoneNumber(clientSaved.getClientPhoneNumber());
@@ -73,18 +73,18 @@ public class ClientService {
         return commonResponse;
     }
 
-    public Client getAccountByCpf(String cpf) {
-        if (cpfAlreadySavedOnDatabase(cpf)) {
-            Optional<Client> client = clientRepository.findById(cpf);
+    public Client getAccountByCpf(String id) {
+        if (isIdAlreadySavedOnDatabase(id)) {
+            Optional<Client> client = clientRepository.findById(id);
             return client.get();
         } else {
             throw new RequestException(USER_NOT_FOUND);
         }
     }
 
-    public void deleteAccountByCpf(String cpf) {
-        if (cpfAlreadySavedOnDatabase(cpf)) {
-            clientRepository.deleteById(cpf);
+    public void deleteAccountByCpf(String id) {
+        if (isIdAlreadySavedOnDatabase(id)) {
+            clientRepository.deleteById(id);
         } else {
             throw new RequestException(USER_NOT_FOUND);
         }
@@ -100,7 +100,7 @@ public class ClientService {
         return true;
     }
 
-    private boolean cpfAlreadySavedOnDatabase(String cpf) {
-        return clientRepository.findById(cpf).isPresent();
+    private boolean isIdAlreadySavedOnDatabase(String id) {
+        return clientRepository.findById(id).isPresent();
     }
 }

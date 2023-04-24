@@ -2,14 +2,13 @@ package io.github.valtergabriell.msaccount.application.dto;
 
 import io.github.valtergabriell.msaccount.entity.Client;
 import io.github.valtergabriell.msaccount.entity.enums.Gender;
-import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
 public class CreateClientRequest {
-    private String cpf;
+    private String id;
     private LocalDate birthDate;
     private String clientName;
     private String clientPhoneNumber;
@@ -19,15 +18,15 @@ public class CreateClientRequest {
     private BigDecimal income;
 
     public Client toModel() {
-        return new Client(cpf, birthDate, clientName, clientPhoneNumber, clientEmail, gender, password, income);
+        return new Client(id, birthDate, clientName, clientPhoneNumber, clientEmail, gender, password, income);
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getId() {
+        return id;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public LocalDate getBirthDate() {
@@ -85,12 +84,4 @@ public class CreateClientRequest {
     public void setIncome(BigDecimal income) {
         this.income = income;
     }
-
-
-
-
-    public boolean isCPFCorrectSize(){
-        return cpfValidator.validateFieldSize(request.getCpf());
-    }
-
 }

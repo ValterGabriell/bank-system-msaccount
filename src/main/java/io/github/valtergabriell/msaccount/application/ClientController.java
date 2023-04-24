@@ -25,7 +25,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<CommonResponse<CreateClientResponse>> createClient(@RequestBody CreateClientRequest request) {
-        URI headerLocation = ServletUriComponentsBuilder.fromHttpUrl("http://localhost:9090").query("cpf={cpf}").buildAndExpand(request.getCpf()).toUri();
+        URI headerLocation = ServletUriComponentsBuilder.fromHttpUrl("http://localhost:9090").query("cpf={cpf}").buildAndExpand(request.getId()).toUri();
         CommonResponse<CreateClientResponse> client = clientService.createClient(request, headerLocation);
         return ResponseEntity.status(HttpStatus.CREATED).body(client);
     }
