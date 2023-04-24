@@ -1,4 +1,4 @@
-<h1 align="center">Microserviços de contas dos clientes - Sistema Bancário</h1>
+<h1 align="center">Microserviços de contas dos clientes - Empresa de Software</h1>
 <p align="center"><i>Repositório responsável por armazenar o microserviço que cria as contas dos clientes.</i></p>
 
 ##  Sobre esse projeto
@@ -10,7 +10,7 @@ Este é um projeto que deve ser rodado após o Eureka Server estar rodando, para
    * [Como usar?](#como-usar)
    * [Endpoints](#endpoints)
    * [Testes](#testes)
-   * [Credits](#credits)
+   * [Creditos](#creditos)
 <!--te-->
   
 <h1>Como usar?</h1>
@@ -182,7 +182,7 @@ http://localhost:8080/account
     }
 ```
 
-<h1>Credits</h1>
+<h1>Creditos</h1>
 
 ---
 
