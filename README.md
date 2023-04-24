@@ -1,4 +1,4 @@
-<h1 align="center">Microserviços de contas dos clientes - Sistema Bancário</h1>
+<h1 align="center">Microserviços de contas dos clientes - Empresa de Software</h1>
 <p align="center"><i>Repositório responsável por armazenar o microserviço que cria as contas dos clientes.</i></p>
 
 ##  Sobre esse projeto
