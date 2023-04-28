@@ -18,7 +18,7 @@ public class CreateClientRequest {
     private BigDecimal income;
 
     public Client toModel() {
-        return new Client(id, birthDate, clientName, clientPhoneNumber, clientEmail, gender, password, income);
+        return new Client(id, clientName, clientPhoneNumber, clientEmail, income);
     }
 
     public String getId() {
