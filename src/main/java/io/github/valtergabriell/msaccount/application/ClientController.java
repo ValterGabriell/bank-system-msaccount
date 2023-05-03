@@ -1,7 +1,6 @@
 package io.github.valtergabriell.msaccount.application;
 
 
-import io.github.valtergabriell.msaccount.application.validator.CPFValidator;
 import io.github.valtergabriell.msaccount.entity.Client;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +18,15 @@ public class ClientController {
     }
 
 
-    @GetMapping(params = "cpf")
-    public ResponseEntity<Client> getAccountData(@RequestParam("cpf") String cpf) {
-        var account = clientService.getAccountByCpf(cpf);
+    @GetMapping(params = "id")
+    public ResponseEntity<Client> getAccountData(@RequestParam("id") String id) {
+        var account = clientService.getAccountByIdentifier(id);
         return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 
-    @DeleteMapping(params = "cpf")
-    public ResponseEntity deleteAccountData(@RequestParam("cpf") String cpf) {
-        clientService.deleteAccountByCpf(cpf);
+    @DeleteMapping(params = "id")
+    public ResponseEntity deleteAccountData(@RequestParam("id") String id) {
+        clientService.deleteAccountByIdentifier(id);
         return ResponseEntity.noContent().build();
     }
 

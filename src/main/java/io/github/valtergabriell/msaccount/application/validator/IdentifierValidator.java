@@ -6,7 +6,7 @@ import io.github.valtergabriell.msaccount.application.util.CommonMethod;
 import static io.github.valtergabriell.msaccount.application.exception.ExceptionsValues.*;
 
 
-public class CPFValidator extends NumberFieldsValidation {
+public class IdentifierValidator extends NumberFieldsValidation {
 
 
     @Override

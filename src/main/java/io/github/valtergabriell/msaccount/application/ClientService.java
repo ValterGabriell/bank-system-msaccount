@@ -2,13 +2,12 @@ package io.github.valtergabriell.msaccount.application;
 
 import io.github.valtergabriell.msaccount.application.dto.ReceiveDataForCreateNewClient;
 import io.github.valtergabriell.msaccount.application.exception.RequestExceptions;
-import io.github.valtergabriell.msaccount.application.validator.CPFValidator;
+import io.github.valtergabriell.msaccount.application.validator.IdentifierValidator;
 import io.github.valtergabriell.msaccount.entity.Client;
 import io.github.valtergabriell.msaccount.infra.ClientRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static io.github.valtergabriell.msaccount.application.exception.ExceptionsValues.*;
@@ -31,8 +30,8 @@ public class ClientService {
         }
     }
 
-    public Client getAccountByCpf(String id) {
-        validatingCpf(id);
+    public Client getAccountByIdentifier(String id) {
+        validatingIdentifier(id);
         if (isIdAlreadySavedOnDatabase(id)) {
             Optional<Client> client = clientRepository.findById(id);
             return client.get();
@@ -41,14 +40,14 @@ public class ClientService {
         }
     }
 
-    private static void validatingCpf(String id) {
-        CPFValidator cv = new CPFValidator();
+    private static void validatingIdentifier(String id) {
+        IdentifierValidator cv = new IdentifierValidator();
         cv.validateFieldSize(id);
         cv.hasOnlyOneDigitOnWholeNumber(id);
     }
 
-    public void deleteAccountByCpf(String id) {
-        validatingCpf(id);
+    public void deleteAccountByIdentifier(String id) {
+        validatingIdentifier(id);
         if (isIdAlreadySavedOnDatabase(id)) {
             clientRepository.deleteById(id);
         } else {
