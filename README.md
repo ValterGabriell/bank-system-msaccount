@@ -28,6 +28,9 @@ Este é um projeto que deve ser rodado após o Eureka Server estar rodando, para
 
   
 <h1>Endpoints</h1>
+
+Uma conta é criada sempre que um líder ou colaborador for criado!
+
 <h3>BASE URL</h3>
 
 ```bash
