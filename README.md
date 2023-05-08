@@ -33,57 +33,6 @@ Este é um projeto que deve ser rodado após o Eureka Server estar rodando, para
 ```bash
 http://localhost:8080/account
 ``` 
-<h1>POST</h1></br>
-
-<h2>Criar conta</h2>
-
-<table>
-  <tr>
-    <th>Request</th>
-    <th>Response</th>
-  </tr>
-  <tr>
-    <td>/</td>
-    <td>criar conta</td>
-  </tr>
-</table>
-
-<h3>Request esperada</h3></br>
-
-```bash
-{
-	"cpf":"22324672912",
-	"birthDate":"2005-06-25",
-	"clientName":"nome teste",
-	"clientPhoneNumber":"5589541222659",
-	"clientEmail":"email@gmail.com",
-	"gender":"FEMALE",
-	"password":"12345",
-	"income":6500
-}
-```
-
-
-
-<h3>Resposta esperada</h3></br>
-
-```bash
-{
-	"data": {
-		"cpf": "22324672912",
-		"birthDate": "2005-06-25",
-		"accountDate": "2023-04-12",
-		"clientName": "nome teste",
-		"clientPhoneNumber": "5589541222659",
-		"clientEmail": "email@gmail.com",
-		"gender": "FEMALE",
-		"income": 6500
-	},
-	"message": "Conta criada com sucesso!",
-	"headerLocation": "http://localhost:9090?cpf=22324672912"
-}
-```
-
 <h1>GET</h1></br>
 
 
@@ -97,7 +46,7 @@ http://localhost:8080/account
   <tr>
     <td>/</td>
     <td>recupera informações do cliente</td>
-    <td>cpf cliente</td>
+    <td>id</td>
   </tr>
 </table>
 
@@ -118,6 +67,24 @@ http://localhost:8080/account
 	"income": 6500.00
 }
 ```
+
+
+<h1>DELETE</h1></br>
+
+
+<h2>Deletar conta</h2>
+<table>
+  <tr>
+    <th>Request</th>
+    <th>Response</th>
+    <th>Query</th>
+  </tr>
+  <tr>
+    <td>/</td>
+    <td>delete informações do cliente</td>
+    <td>id</td>
+  </tr>
+</table>
 
 <h1>Testes</h1>
 
