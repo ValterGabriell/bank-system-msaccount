@@ -25,7 +25,7 @@ public class ClientController {
     }
 
     @DeleteMapping(params = "id")
-    public ResponseEntity deleteAccountData(@RequestParam("id") String id) {
+    public ResponseEntity<?> deleteAccountData(@RequestParam("id") String id) {
         clientService.deleteAccountByIdentifier(id);
         return ResponseEntity.noContent().build();
     }

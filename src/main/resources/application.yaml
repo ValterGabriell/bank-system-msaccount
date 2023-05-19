@@ -1,7 +1,11 @@
 spring:
   application:
     name: msaccount
-
+  rabbitmq:
+    host: 192.168.1.6
+    port: 5672
+    username: guest
+    password: guest
 server:
   port: 0
 
